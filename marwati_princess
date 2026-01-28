@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Marwa 🎂</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root { --pink: #ffb7c5; --dark-pink: #d81b60; --cake-vanilla: #f9e79f; --cake-chocolate: #6e463a; }
+    body { 
+      background: #fff5f7; font-family: 'Segoe UI', Tahoma, sans-serif;
+      display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;
+    }
+    .card { background: white; padding: 30px; border-radius: 35px; text-align: center; width: 350px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); }
+    
+    /* منصة الكعكة */
+    .cake-stage { height: 200px; position: relative; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 20px; }
+    .cake-body { width: 180px; height: 90px; background: var(--cake-vanilla); border-radius: 15px 15px 5px 5px; position: relative; transition: 0.5s; border-bottom: 6px solid rgba(0,0,0,0.1); }
+    
+    /* الزينة (SVG لتبدو واقعية) */
+    .decoration { position: absolute; visibility: hidden; opacity: 0; transition: 0.3s; }
+    .show { visibility: visible !important; opacity: 1 !important; }
+
+    /* الشمعة */
+    .candle-svg { top: -50px; left: 75px; width: 30px; }
+    /* الفراولة */
+    .strawberry-svg { top: -25px; left: 30px; width: 35px; }
+    .strawberry-svg.right { left: 115px; }
+    /* الكريمة */
+    .cream-svg { top: -10px; left: 0; width: 100%; height: 25px; }
+
+    h2 { color: var(--dark-pink); font-size: 1.2rem; }
+    .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    button { background: var(--pink); border: none; padding: 12px; border-radius: 15px; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background: var(--dark-pink); transform: translateY(-2px); }
+    .final-btn { grid-column: span 2; background: var(--dark-pink); margin-top: 10px; border: 2px solid #fff; }
+  </style>
+</head>
+<body>
+
+<audio id="bgMusic" loop><source src="song.mp3" type="audio/mpeg"></audio>
+
+<div id="app">
+  <div class="card">
+    <h2>اصنعي كعكة ميلادكِ يا مروة 🍰</h2>
+    
+    <div class="cake-stage">
+      <div id="mainCake" class="cake-body">
+        <svg id="cream" class="decoration cream-svg" viewBox="0 0 180 25">
+          <path d="M0,10 Q15,0 30,10 Q45,20 60,10 Q75,0 90,10 Q105,20 120,10 Q135,0 150,10 Q165,20 180,10 L180,25 L0,25 Z" fill="#ffffff" />
+        </svg>
+        <svg id="berry1" class="decoration strawberry-svg" viewBox="0 0 24 24" fill="#e74c3c"><path d="M12,2C12,2 4,8 4,14C4,18 7.58,22 12,22C16.42,22 20,18 20,14C20,8 12,2 12,2M12,4C12,4 18,9.5 18,14C18,17.31 15.31,20 12,20C8.69,20 6,17.31 6,14C6,9.5 12,4 12,4M12,1L10,5L12,4L14,5L12,1Z"/></svg>
+        <svg id="berry2" class="decoration strawberry-svg right" viewBox="0 0 24 24" fill="#e74c3c"><path d="M12,2C12,2 4,8 4,14C4,18 7.58,22 12,22C16.42,22 20,18 20,14C20,8 12,2 12,2M12,4C12,4 18,9.5 18,14C18,17.31 15.31,20 12,20C8.69,20 6,17.31 6,14C6,9.5 12,4 12,4M12,1L10,5L12,4L14,5L12,1Z"/></svg>
+        <svg id="candle" class="decoration candle-svg" viewBox="0 0 24 24">
+          <rect x="10" y="8" width="4" height="16" fill="#5dade2" />
+          <path d="M12,2 Q14,5 12,7 Q10,5 12,2" fill="#f39c12"><animate attributeName="opacity" values="1;0.6;1" dur="0.6s" repeatCount="indefinite"/></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button onclick="changeFlavor()">تغيير النكهة ✨</button>
+      <button onclick="toggleDec('cream')">إضافة كريمة 🍦</button>
+      <button onclick="toggleDec('berry1'); toggleDec('berry2');">وضع فراولة 🍓</button>
+      <button onclick="toggleDec('candle')">إشعال شمعة 🕯️</button>
+      <button class="final-btn" onclick="celebrate()">انتهيت! 💖</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const music = document.getElementById('bgMusic');
+  
+  function changeFlavor() {
+    music.play();
+    const cake = document.getElementById('mainCake');
+    cake.style.background = cake.style.background === 'rgb(110, 70, 58)' ? '#f9e79f' : '#6e463a';
+  }
+
+  function toggleDec(id) {
+    music.play();
+    document.getElementById(id).classList.toggle('show');
+  }
+
+  function celebrate() {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    document.getElementById('app').innerHTML = `
+      <div class="card" style="animation: pop 0.5s ease;">
+        <h2 style="font-size: 1.6rem; color: #d81b60;">كبرتِ صغيرتي الجميلة مروة! ❤️</h2>
+        <svg width="100" height="100" viewBox="0 0 24 24" fill="#ffb7c5"><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.41,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.59,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z"/></svg>
+        <h2 style="margin-top: 15px;">كل عام وأنتِ بخير مروة ✨</h2>
+        <p style="color: #555;">يا رب تكون سنة مليئة بالحب والنجاح.. <br> ممتنة لأنكِ صديقتي!</p>
+        <button onclick="location.reload()">أعيدي اللعب 🔄</button>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>
