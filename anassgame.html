@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anass Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --bg: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); --pink: #ff80ab; --purple: #7b1fa2; }
+        .dark-mode { --bg: #000; --pink: #ff80ab; --purple: #fff; }
+        body { background: var(--bg); font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 1s; }
+        .card { background: rgba(255,255,255,0.9); padding: 30px; border-radius: 20px; text-align: center; width: 300px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .dark-mode .card { background: #111; border: 1px solid #333; }
+        h2 { color: var(--purple); font-size: 1.1rem; }
+        button { background: var(--pink); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; margin-top: 10px; cursor: pointer; font-weight: bold; }
+        input { width: 90%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <div id="app" class="card">
+        <h2>Heyoo Anass! 🌸<br>Wanna play a game?</h2>
+        <button onclick="sendData('Start', 'Yes'); play()">Yes, Start! ✨</button>
+    </div>
+
+    <script>
+        const webhook = "https://app.forminit.com/f/e7er6de3jxh";
+
+        async function sendData(step, choice) {
+            const data = new FormData();
+            data.append("Step", step);
+            data.append("Choice", choice);
+            
+            // إرسال البيانات بشكل صامت في الخلفية
+            fetch(webhook, { method: "POST", body: data, mode: "no-cors" });
+        }
+
+        function render(content) { document.getElementById('app').innerHTML = content; }
+
+        window.play = () => {
+            render(`<h2>Choose the one that feels right 🫧</h2><button onclick="sendData('Q1', 'Next'); q1()">Next</button>`);
+        };
+
+        window.q1 = () => {
+            render(`<h2>Remember what happened on this day last year? 🗓️</h2>
+                    <button onclick="sendData('Memory', 'Yes'); q2()">Yes</button>`);
+        };
+
+        window.q2 = () => {
+            render(`<h2>Choose the right one 🍬</h2>
+                    <button onclick="sendData('Level', 'Option 1'); devMode()">1) First confusing to me</button>`);
+        };
+
+        window.devMode = () => {
+            document.body.classList.add('dark-mode');
+            render(`<h2 style="color:var(--pink)">DEVELOPER MODE</h2>
+                    <p style="color:white; font-size:0.8rem">I never liked how we ended...</p>
+                    <button onclick="sendData('Final', 'Finished'); finish()">Continue</button>`);
+        };
+
+        window.finish = () => {
+            confetti();
+            render(`<h2 style="color:white">GAME OVER</h2><p style="color:white">Memories archived.</p>`);
+        };
+    </script>
+</body>
+</html>
