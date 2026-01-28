@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marwa's Special Day 🎂</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary: #ffb7c5; 
+      --secondary: #9b59b6; 
+      --bg: #fff5f7;
+    }
+    body { 
+      background: var(--bg); font-family: 'Segoe UI', Tahoma, sans-serif;
+      display: flex; justify-content: center; align-items: center; 
+      height: 100vh; margin: 0; overflow: hidden;
+    }
+    .card { 
+      background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 30px; 
+      text-align: center; width: 320px; box-shadow: 0 10px 40px rgba(255, 183, 197, 0.4);
+      border: 2px solid #fff;
+    }
+    h2 { color: #d81b60; font-size: 1.3rem; margin-bottom: 20px; line-height: 1.6; }
+    button { 
+      background: var(--primary); border: none; padding: 15px; border-radius: 15px; 
+      color: white; font-weight: bold; width: 100%; margin-bottom: 12px; cursor: pointer; 
+      transition: 0.3s; font-size: 1rem;
+    }
+    button:hover { background: #ff8fa3; transform: scale(1.03); }
+  </style>
+</head>
+<body>
+
+  <audio id="marwaMusic" loop>
+    <source src="marwasong.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="app"></div>
+
+  <script>
+    const music = document.getElementById('marwaMusic');
+    
+    function render(content) { 
+      document.getElementById('app').innerHTML = `<div class="card">${content}</div>`; 
+    }
+
+    // شاشة البداية
+    window.start = () => {
+      render(`
+        <div style="font-size: 3rem;">🎁</div>
+        <h2>أهلاً مروة الجميلة.. <br> فيه مفاجأة صغيرة تنتظركِ.. جاهزة؟</h2>
+        <button onclick="playGame()">أكيد، افتحيها! ✨</button>
+      `);
+    };
+
+    window.playGame = () => {
+      music.play(); 
+      render(`
+        <h2>اليوم كبرتِ سنة يا أغلى مروة! 🎂</h2>
+        <p>تدرين كم معزتك بقلبي؟</p>
+        <button onclick="q1()">قد الدنيا كلها 💗</button>
+        <button onclick="q1()">أكثر مما تتخيلي ☁️</button>
+      `);
+    };
+
+    window.q1 = () => {
+      render(`
+        <h2>لو خيروكِ مروة.. أي هدية تحبين؟ 🎀</h2>
+        <button onclick="q2('الورد')">باقة ورد كبيرة 🌷</button>
+        <button onclick="q2('السفر')">تذكرة سفر لمكان تحبيه ✈️</button>
+      `);
+    };
+
+    window.q2 = (choice) => {
+      render(`
+        <h2>حتى ${choice} قليل بحقك! ✨</h2>
+        <button onclick="finalLevel()">نعم، وريني الرسالة! 💌</button>
+      `);
+    };
+
+    window.finalLevel = () => {
+      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+      render(`
+        <h2 style="color: #d81b60;">كل عام وأنتِ بخير مروة! 🎉</h2>
+        <p style="font-size: 0.9rem; color: #555;">
+          سنة حلوة تشبه قلبك، يا رب تكون أيامك كلها فرح. <br>
+          ممتنة جداً لوجودك في حياتي! ❤️
+        </p>
+        <div style="font-size: 2rem;">🎂🎈</div>
+        <button style="background:#e1bee7; color:#7b1fa2; margin-top:10px" onclick="location.reload()">إعادة 🔄</button>
+      `);
+    };
+
+    start();
+  </script>
+</body>
+</html>
