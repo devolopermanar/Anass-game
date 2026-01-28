@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anass Game 🌸</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --pink: #ff80ab; --purple: #7b1fa2; }
+        body { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; transition: 1s; }
+        .dark-mode { background: #0a0a0a; }
+        .card { background: rgba(255,255,255,0.9); padding: 30px; border-radius: 20px; text-align: center; width: 310px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid transparent; transition: 0.5s; }
+        .dark-mode .card { background: #1a1a1a; color: #fff; border-color: var(--pink); box-shadow: 0 0 20px var(--pink); }
+        h2 { color: var(--purple); font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+        .dark-mode h2 { color: #fff; }
+        button { background: var(--pink); border: none; padding: 12px; border-radius: 10px; color: white; font-weight: bold; width: 100%; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        button:hover { transform: scale(1.02); }
+        .wrong { background: #eee; color: #aaa; cursor: not-allowed; }
+        input { width: 90%; padding: 12px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ddd; outline: none; }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://files.catbox.moe/9p9m4n.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="app">
+        <div class="card">
+            <h2>Heyoo Anass! 🌸<br>Wanna play a game?</h2>
+            <button onclick="playGame()">Yes, Start! ✨</button>
+            <button class="wrong">No</button>
+        </div>
+    </div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        const app = document.getElementById('app');
+        const endpoint = 'https://formspree.io/f/mlgbqpdl';
+
+        function send(step, choice) {
+            fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ step, choice }) }).catch(() => {});
+        }
+
+        function type(text, id, speed, callback) {
+            let i = 0; const el = document.getElementById(id); el.innerHTML = "";
+            function t() { if (i < text.length) { el.innerHTML += text.charAt(i); i++; setTimeout(t, speed); } else if (callback) callback(); }
+            t();
+        }
+
+        window.playGame = () => {
+            music.play();
+            send("Start", "Game Started");
+            app.innerHTML = `<div class="card"><h2>Choose the one that feels right 🫧</h2><button onclick="q1()">Next</button></div>`;
+        };
+
+        window.q1 = () => {
+            app.innerHTML = `<div class="card"><h2>Remember what happened on this day last year? 🗓️</h2><button onclick="send('Memory','Yes'); q2()">Yes</button><button class="wrong">No</button></div>`;
+        };
+
+        window.q2 = () => {
+            app.innerHTML = `<div class="card"><h2>Choose the right one 🍬</h2><button onclick="send('Q2','Option 1'); nextLevel()">1) First confusing to me</button><button class="wrong">2) My birthday</button></div>`;
+        };
+
+        window.nextLevel = () => {
+            app.innerHTML = `<div class="card"><h2>Alright, we're moving to the next level of the game, if u're not ready, just leave!</h2><button onclick="send('Choice','Continue'); whyHere()">Let's keep playing</button><button style="background:#555" onclick="location.reload()">That's enough</button></div>`;
+        };
+
+        window.whyHere = () => {
+            app.innerHTML = `<div class="card"><h2>Why are u still here playing this?</h2><button onclick="send('Why','Curiosity'); storySong()">Because of my curiosity</button><button onclick="send('Why','Love'); storySong()">Because I loved the game</button></div>`;
+        };
+
+        window.storySong = () => {
+            app.innerHTML = `<div class="card"><h2>If our story was a song, which one would it be?</h2><input id="sIn" type="text" placeholder="Type here..."><button onclick="send('StorySong', document.getElementById('sIn').value); whichReminds()">Send Answer</button></div>`;
+        };
+
+        window.whichReminds = () => {
+            app.innerHTML = `<div class="card"><h2>Which song reminds u of us?</h2><button onclick="finalStage('Good for you')">Good for you</button><button onclick="finalStage('Arcane, Ma meilleure ennemie')">Arcane, Ma meilleure ennemie</button><button onclick="finalStage('Lipstick')">Lipstick</button></div>`;
+        };
+
+        window.finalStage = (choice) => {
+            send("RemindSong", choice); confetti();
+            app.innerHTML = `<div class="card"><h2>I knew you’d pick this one.. you always loved how it feels 🦋</h2><button onclick="devMode()">Continue</button></div>`;
+        };
+
+        window.devMode = () => {
+            app.innerHTML = `<div class="card"><h2 style="color:var(--pink); font-weight:bold; font-size:1.4rem">𝐝𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫 𝐦𝐨𝐝𝐞</h2><h2 id="dt"></h2><div id="ba"></div></div>`;
+            type("I never liked the way we ended, soo, as a developer, I'm gonna end it my way.", "dt", 30, () => {
+                document.getElementById('ba').innerHTML = `<button onclick="switchToBlack()">next</button>`;
+            });
+        };
+
+        window.switchToBlack = () => {
+            document.body.classList.add('dark-mode');
+            app.innerHTML = `<div class="card"><h2 id="ct"></h2><div id="ba"></div></div>`;
+            type("I know it has been a long time since you confessed your love to me, so I've decided to confess my feelings as well and leave our memories here within this game.", "ct", 30, () => {
+                document.getElementById('ba').innerHTML = `<p style="font-size:0.75rem; color:#fff; margin-bottom:10px">I've decided to add another level to the game if you don't mind and feel curious, press 'next'</p><button onclick="regretLevel()">next</button><button style="background:#333" onclick="location.reload()">no</button>`;
+            });
+        };
+
+        window.regretLevel = () => {
+            app.innerHTML = `<div class="card"><h2 id="rt"></h2><div id="ba"></div></div>`;
+            type("Tbh I really regret making friends with those guys especially that one I helped with the exam. If I knew he’d mess things up between us, I wouldn’t have even talked to him, maybe bcs he sent me answers during exam but I should’ve been selfish for you and not thought abt helping him. I don’t get why you’re still on my mind or why you keep popping up in my dreams. If you wanna know about the dream, press 'next'.", "rt", 30, () => {
+                document.getElementById('ba').innerHTML = `<button onclick="dreamLevel()">next</button><button style="background:#333" onclick="finalLetter()">that's enough</button>`;
+            });
+        };
+
+        window.dreamLevel = () => {
+            app.innerHTML = `<div class="card"><h2 id="dr" style="font-style:italic"></h2><div id="ba"></div></div>`;
+            type("We were chilling at the beach, and I was leaning on your shoulder. You looked at me with tears in your eyes, I put my hand on your cheek, but you stood up and ran away I had this dream so many times I couldn't handle all of this stress anymore so My mom even took me to the hospital, but she had no idea you were the reason behind it all!", "dr", 30, () => {
+                document.getElementById('ba').innerHTML = `<button onclick="finalLetter()">next</button>`;
+            });
+        };
+
+        window.finalLetter = () => {
+            app.innerHTML = `<div class="card"><h2 id="lt"></h2><div id="ba"></div></div>`;
+            type("I’ve tried to fix my heart, but honestly, the 'love' variable for you is just hardcoded in my system. I can't delete it, and maybe I never will. But for my own sake, I’m archiving this file and moving on. I'm moving on because I have to, not because I want to. You’ll always be my favorite chapter, but this is where I finally close the book", "lt", 35, () => {
+                document.getElementById('ba').innerHTML = `<button onclick="fadeOut()">finish</button>`;
+            });
+        };
+
+        window.fadeOut = () => {
+            send("Status", "Finished Game");
+            document.body.style.opacity = '0';
+            setTimeout(() => {
+                document.body.style.background = "#000";
+                document.body.innerHTML = "<h1 style='color:white; font-family:sans-serif;'>GAME OVER</h1>";
+                document.body.style.opacity = '1';
+            }, 2000);
+        };
+    </script>
+</body>
+</html>
