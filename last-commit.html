@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anass Game 🌸</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --main-pink: #ff80ab;
+      --deep-purple: #7b1fa2;
+      --text-color: #7b1fa2;
+    }
+    .dark-mode {
+      --bg-gradient: #000;
+      --card-bg: #111;
+      --main-pink: #ff80ab;
+      --deep-purple: #fff;
+      --text-color: #fff;
+    }
+    body { 
+      background: var(--bg-gradient); font-family: 'Segoe UI', sans-serif;
+      display: flex; justify-content: center; align-items: center; 
+      height: 100vh; margin: 0; overflow: hidden;
+      transition: background 1s ease-in-out, opacity 2s ease-in-out;
+    }
+    .card { 
+      background: var(--card-bg); padding: 35px 25px; border-radius: 25px; 
+      border: 1px solid rgba(255,255,255,0.3); text-align: center; 
+      width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      backdrop-filter: blur(15px);
+    }
+    h2 { color: var(--text-color); font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5; }
+    button { 
+      background: var(--main-pink); border: none; padding: 14px; border-radius: 12px; 
+      color: white; font-weight: bold; width: 100%; margin-bottom: 10px; cursor: pointer; 
+      transition: 0.3s;
+    }
+    button:hover { transform: scale(1.02); }
+    input { width: 90%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; text-align: center; }
+    .wrong { background: #eee; color: #999; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" loop><source src="https://files.catbox.moe/97gqcl.mp3" type="audio/mpeg"></audio>
+  <div id="app"></div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    // تم استبدال الرابط برابط Formspree الخاص بكِ بنجاح
+    const endpoint = 'https://formspree.io/f/mlgbqpdl';
+
+    async function sendUpdate(step, choice) {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ "Step": step, "Choice": choice })
+      }).catch(err => console.log("Error"));
+    }
+
+    function render(content) { document.getElementById('app').innerHTML = `<div class="card">${content}</div>`; }
+
+    function typeWriter(text, elementId, speed, callback) {
+      let i = 0;
+      const elem = document.getElementById(elementId);
+      function type() {
+        if (i < text.length) {
+          elem.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else if (callback) { callback(); }
+      }
+      type();
+    }
+
+    window.start = () => { render(`<h2>Heyoo Anass! 🌸<br>Wanna play a game?</h2><button onclick="play()">Yes, Start! ✨</button><button class="wrong">No</button>`); };
+
+    window.play = () => { 
+      music.play(); 
+      sendUpdate("Game Action", "Anass started the game");
+      render(`<h2>Choose the one that feels right 🫧</h2><button onclick="q1()">Next</button>`); 
+    };
+
+    window.q1 = () => { render(`<h2>Remember what happened on this day last year? 🗓️</h2><button onclick="sendUpdate('Memory','Yes'); q2()">Yes</button><button class="wrong">No</button>`); };
+
+    window.q2 = () => { render(`<h2>Choose the right one 🍬</h2><button onclick="sendUpdate('Confusing','Option 1'); nextLevel()">1) First confusing to me</button><button class="wrong">2) My birthday</button>`); };
+
+    window.nextLevel = () => {
+      render(`<h2>Alright, we're moving to the next level of the game, if u're not ready, just leave!</h2>
+      <button onclick="sendUpdate('Challenge','Keep Playing'); whyHere()">Let's keep playing</button>
+      <button style="background:#555" onclick="sendUpdate('Challenge','Quit'); render('<h2>Game Closed.</h2>')">That's enough</button>`);
+    };
+
+    window.whyHere = () => {
+      render(`<h2>Why are u still here playing this?</h2>
+      <button onclick="sendUpdate('WhyHere','Curiosity'); storySong()">Because of my curiosity</button>
+      <button onclick="sendUpdate('WhyHere','LoveGame'); storySong()">Because I loved the game</button>`);
+    };
+
+    window.storySong = () => {
+      render(`<h2>If our story was a song, which one would it be?</h2>
+      <input type="text" id="songInput" placeholder="Type here...">
+      <button onclick="let val=document.getElementById('songInput').value; sendUpdate('StorySong', val); whichReminds()">Send Answer</button>`);
+    };
+
+    window.whichReminds = () => {
+      render(`<h2>Which song reminds u of us?</h2>
+      <button onclick="final('Good for you')">Good for you</button>
+      <button onclick="final('Arcane, Ma meilleure ennemie')">Arcane, Ma meilleure ennemie</button>
+      <button onclick="final('Lipstick')">Lipstick</button>`);
+    };
+
+    window.final = (choice) => {
+      sendUpdate("RemindSong", choice);
+      confetti({ particleCount: 150, spread: 70 });
+      render(`<h2>I knew you’d pick this one.. you always loved how it feels 🦋</h2>
+      <button onclick="developerMode()">Continue</button>`);
+    };
+
+    window.developerMode = () => {
+      sendUpdate("Phase", "Entered Developer Mode Intro");
+      render(`<h2 style="color:#ff80ab; font-weight:bold; font-size:1.5rem">𝐝𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫 𝐦𝐨𝐝𝐞</h2>
+              <h2 id="dev-intro" style="color:var(--text-color); font-size:1rem"></h2>
+              <div id="btn-area"></div>`);
+      typeWriter("I never liked the way we ended, soo, as a developer, I'm gonna end it my way.", "dev-intro", 50, () => {
+        document.getElementById('btn-area').innerHTML = `<button onclick="switchToBlack()">next</button>`;
+      });
+    };
+
+    window.switchToBlack = () => {
+      document.body.classList.add('dark-mode');
+      sendUpdate("Phase", "Dark Mode Activated");
+      render(`<h2 id="confess-text"></h2><div id="btn-area"></div>`);
+      typeWriter("I know it has been a long time since you confessed your love to me, so I've decided to confess my feelings as well and leave our memories here within this game.", "confess-text", 40, () => {
+        document.getElementById('btn-area').innerHTML = `<button onclick="regretLevel()">next</button>`;
+      });
+    };
+
+    window.regretLevel = () => {
+      render(`<h2 id="regret-text"></h2><div id="btn-area"></div>`);
+      typeWriter("Tbh I really regret making friends with those guys especially that one I helped with the exam. If I knew he’d mess things up between us, I wouldn’t have even talked to him. If you wanna know about the dream, press 'next'.", "regret-text", 40, () => {
+        document.getElementById('btn-area').innerHTML = `<button onclick="dreamLevel()">next</button>`;
+      });
+    };
+
+    window.dreamLevel = () => {
+      sendUpdate("Phase", "Reading the Dream");
+      render(`<h2 id="dream-text" style="font-style:italic"></h2><div id="btn-area"></div>`);
+      typeWriter("We were chilling at the beach, and I was leaning on your shoulder. You looked at me with tears in your eyes... My mom even took me to the hospital, but she had no idea you were the reason behind it all!", "dream-text", 80, () => {
+        document.getElementById('btn-area').innerHTML = `<button onclick="finalLetter()">next</button>`;
+      });
+    };
+
+    window.finalLetter = () => {
+      render(`<h2 id="final-text"></h2><div id="btn-area"></div>`);
+      typeWriter("I'm archiving this file and moving on. You’ll always be my favorite chapter, but this is where I finally close the book.", "final-text", 50, () => {
+        document.getElementById('btn-area').innerHTML = `<button onclick="fadeOut()">finish</button>`;
+      });
+    };
+
+    window.fadeOut = () => {
+      sendUpdate("Game Status", "Finished completely");
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.background = "#000";
+        document.body.innerHTML = "<h1 style='color:white; font-family:sans-serif;'>GAME OVER</h1>";
+        document.body.style.opacity = '1';
+      }, 2000);
+    };
+
+    start();
+  </script>
+</body>
+</html>
