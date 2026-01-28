@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anass Game 🌸</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --main-pink: #ff80ab;
+      --text-color: #7b1fa2;
+    }
+    .dark-mode {
+      --bg-gradient: #0a0a0a;
+      --card-bg: #1a1a1a;
+      --text-color: #fff;
+    }
+    body { 
+      background: var(--bg-gradient); font-family: 'Segoe UI', sans-serif;
+      display: flex; justify-content: center; align-items: center; 
+      height: 100vh; margin: 0; overflow: hidden; transition: 1s;
+    }
+    .card { 
+      background: var(--card-bg); padding: 35px 25px; border-radius: 25px; 
+      text-align: center; width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: 0.5s; border: 2px solid transparent;
+    }
+    .dark-mode .card { border-color: #ff80ab; box-shadow: 0 0 20px rgba(255,128,171,0.2); }
+    h2 { color: var(--text-color); font-size: 1.1rem; margin-bottom: 20px; line-height: 1.5; }
+    button { 
+      background: var(--main-pink); border: none; padding: 14px; border-radius: 12px; 
+      color: white; font-weight: bold; width: 100%; margin-bottom: 10px; cursor: pointer; 
+    }
+    input { width: 90%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; text-align: center; }
+    .wrong { background: #eee; color: #999; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="https://files.catbox.moe/9p9m4n.mp3" type="audio/mpeg">
+  </audio>
+  <div id="app"></div>
+
+  <script>
+    const music = document.getElementById('bgMusic');
+    const endpoint = 'https://formspree.io/f/mlgbqpdl'; //
+
+    async function sendUpdate(step, choice) {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ "Step": step, "Choice": choice })
+      }).catch(err => console.log("Error"));
+    }
+
+    function render(content) { document.getElementById
