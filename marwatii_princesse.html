@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اصنعي كيكتكِ يا مروة! 🎂</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary-pink: #ffb7c5; /* وردي أساسي */
+      --secondary-purple: #e1bee7; /* بنفسجي فاتح للزر البديل */
+      --text-dark: #333;
+      --bg-light: #fff5f7;
+    }
+    body { 
+      background: var(--bg-light); font-family: 'Segoe UI', Tahoma, sans-serif;
+      display: flex; justify-content: center; align-items: center; 
+      height: 100vh; margin: 0; overflow: hidden;
+    }
+    .card { 
+      background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 30px; 
+      text-align: center; width: 340px; box-shadow: 0 10px 40px rgba(255, 183, 197, 0.4);
+      border: 2px solid #fff;
+    }
+    h2 { color: #d81b60; font-size: 1.35rem; margin-bottom: 20px; line-height: 1.6; }
+    p { color: var(--text-dark); font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
+    button { 
+      background: var(--primary-pink); border: none; padding: 15px; border-radius: 15px; 
+      color: white; font-weight: bold; width: 100%; margin-bottom: 12px; cursor: pointer; 
+      transition: 0.3s; font-size: 1rem;
+    }
+    button:hover { background: #ff8fa3; transform: scale(1.03); }
+    .btn-alt { background: var(--secondary-purple); color: #7b1fa2; }
+    .cake-part { font-size: 3rem; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+  <audio id="marwaMusic" loop>
+    <source src="song.mp3" type="audio/mpeg">
+  </audio>
+
+  <div id="app"></div>
+
+  <script>
+    const music = document.getElementById('marwaMusic');
+    const render = (content) => { document.getElementById('app').innerHTML = `<div class="card">${content}</div>`; };
+    let cakeFlavor = '';
+    let cakeTopping = '';
+
+    // شاشة البداية
+    window.start = () => {
+      render(`
+        <div style="font-size: 3rem;">🎂</div>
+        <h2>أهلاً مروة الجميلة! <br>اليوم سنصنع كيكة ميلادكِ معاً! جاهزة؟</h2>
+        <button onclick="chooseFlavor()">نعم، لنبدأ المرح! ✨</button>
+      `);
+    };
+
+    // اختيار نكهة الكيك
+    window.chooseFlavor = () => {
+      music.play(); // تشغيل الأغنية عند التفاعل الأول
+      render(`
+        <h2>يا صانعة البهجة! 🌸<br>ما هي نكهة كيكتكِ المفضلة؟</h2>
+        <p>كل اختيار يحمل سر صغير لكِ...</p>
+        <button onclick="setFlavor('الفانيلا')">فانيلا ناعمة 🤍</button>
+        <button onclick="setFlavor('الشوكولاتة')">شوكولاتة غنية 🍫</button>
+      `);
+    };
+
+    window.setFlavor = (flavor) => {
+      cakeFlavor = flavor;
+      let message = '';
+      if (flavor === 'الفانيلا') {
+        message = 'اخترتِ الفانيلا، زي روحكِ النقية اللي تنور أي مكان! أنتِ فعلاً صديقة لا تقدر بثمن.';
+      } else { // الشوكولاتة
+        message = 'الشوكولاتة تعبر عن شخصيتكِ العميقة والفريدة! مثلكِ، كل يوم معكِ أحلى.';
+      }
+      render(`
+        <h2>رائع! ${message}</h2>
+        <p>الآن لنزين الكيكة لتكون مثلكِ تماماً...</p>
+        <button onclick="chooseTopping()">الخطوة التالية</button>
+      `);
+    };
+
+    // اختيار تزيين الكيك
+    window.chooseTopping = () => {
+      render(`
+        <h2>أحلى مروة! 💖<br>ماذا ستكون زينة كيكتكِ؟</h2>
+        <button onclick="setTopping('الفراولة')">فراولة حمراء 🍓</button>
+        <button onclick="setTopping('الكريمة والزهور')">كريمة وزهور 🌼</button>
+      `);
+    };
+
+    window.setTopping = (topping) => {
+      cakeTopping = topping;
+      let message = '';
+      if (topping === 'الفراولة') {
+        message = 'الفراولة زي ابتسامتكِ اللي تضيف حلاوة وسعادة لأي موقف. لا تتوقفي عن الابتسام!';
+      } else { // الكريمة والزهور
+        message = 'الزهور والكريمة تعبر عن جمالكِ ورقتكِ. أنتِ قطعة فنية من الله.';
+      }
+      render(`
+        <h2>يا لجمالكِ! ${message}</h2>
+        <p>كيكتكِ جاهزة.. وجمالها من جمالكِ. استعدي للاحتفال!</p>
+        <button onclick="revealCake()">أظهري الكيكة! 🎉</button>
+      `);
+    };
+
+    // عرض الكيكة النهائية والاحتفال
+    window.revealCake = () => {
+      // إطلاق القصاصات الملونة (الكنفيتي)
+      confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+
+      render(`
+        <h2 style="color: #d81b60;">كل عام وأنتِ بخير يا مروة! 🥳</h2>
+        <div class="cake-part">
+            ${cakeFlavor === 'الفانيلا' ? '🍰' : '🎂'} 
+            ${cakeTopping === 'الفراولة' ? '🍓' : '🌸'}
+        </div>
+        <p style="font-weight: bold;">هذه كيكتكِ، صُنعت بحب، تشبهكِ في كل تفاصيلها.</p>
+        <p style="font-size: 0.9rem; color: #666;">أنتِ أجمل هدية في حياتي، وشكراً لوجودكِ!</p>
+        <div style="font-size: 2.5rem;">💖🎁✨</div>
+        <button class="btn-alt" style="margin-top:10px" onclick="location.reload()">صنعي كيكة أخرى! 🔄</button>
+      `);
+    };
+
+    start();
+  </script>
+</body>
+</html>
